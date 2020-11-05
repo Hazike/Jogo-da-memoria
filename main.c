@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <time.h>
 
 int receberDificuldade(int tam, int qtdPares[]);
-int* criarMatriz(int dificuldade);
+int criarMatriz(int dificuldade, char caracteres[9]);
 
 int main(void)
 {
-    int qtdPares[3] = {4, 10, 16};
+    char caracteres[9] = "!@#$%%&(";
+    int qtdPares[3] = {4, 6, 8};
     receberDificuldade(3, qtdPares);
     return 0;
 }
@@ -32,12 +32,17 @@ int receberDificuldade(int tam, int qtdPares[])
     }
     return dificuldade;
 }
-int* criarMatriz(int dificuldade)
+int criarMatriz(int dificuldade, char caracteres[9])
 {
+    int matriz[4][4], linha, qtdChar, i;
+    qtdChar = 4 + (dificuldade-1)*2;
+    linha = dificuldade+1;
     srand(time(0));
-    if(dificuldade==1)
+    for(i=0; i<qtdChar; i++)
     {
-        
-    }
+        while(1)
+        {
 
+        }
+    }
 }
