@@ -1,19 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <time.h>
 
 int receberDificuldade(int tam, int qtdPares[]);
-int* criarMatriz(int dificuldade);
+int criarMatriz(int dificuldade, char caracteres[9]);
 
 int main(void)
 {
-	printf ("-------------Bem vindo ao Jogo da Memoria---------------------\nEssas sao as dificuldades disponiveis:\n");
-    int qtdPares[3] = {4, 10, 16};
+    char caracteres[9] = "!@#$%%&(";
+    int qtdPares[3] = {4, 6, 8};
     receberDificuldade(3, qtdPares);
     return 0;
 }
-/* a funçao recebe um vetor contendo a quantidade de pares em cada dificuldade
+/ a funÃ§ao recebe um vetor contendo a quantidade de pares em cada dificuldade
 e o tamanho do vetor. Ela escreve no console as dificuldades e recebe
 a escolhida pelo usuario, dps retorna a quantidade de pares da dificuldade
 escolhida. */
@@ -22,22 +21,28 @@ int receberDificuldade(int tam, int qtdPares[])
     int i, dificuldade;
     for(i=0; i<tam; i++)
     {
-        printf("Dificuldade numero [%d] com (%d) pares.\n", i+1, qtdPares[i]);
+        printf("Dificuldade %d: %d pares.\n", i+1, qtdPares[i]);
     }
     while (1)
     {
-        printf("Selecione a dificuldade: ");
+        printf("Selecione a dificuldade:");
         scanf("%d", &dificuldade);
         if(dificuldade>0 && dificuldade<=tam) break;
         else printf("Dificuldade selecionada invalida.\n");
     }
     return dificuldade;
 }
-/*int criarMatriz(int dificuldade)
+int criarMatriz(int dificuldade, char caracteres[9])
 {
+    int matriz[4][4], linha, qtdChar, i;
+    qtdChar = 4 + (dificuldade-1)*2;
+    linha = dificuldade+1;
     srand(time(0));
-    if(dificuldade==1)
+    for(i=0; i<qtdChar; i++)
     {
+        while(1)
+        {
 
+        }
     }
-}*/
+}
