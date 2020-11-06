@@ -10,9 +10,10 @@ void atualizarMatriz(int lin1, int col1, int lin2, int col2);
 void limpaTela();
 void checaFim();
 void mostraPontuacao();
+void delay(int segundos);
 
 int matriz[4][4];
-int linha, jogadas, acertos, running, qtdChar, dificuldade, replay;
+int linha, jogadas, acertos, running, qtdChar, dificuldade;
 
 int main(void)
 {
@@ -25,6 +26,7 @@ int main(void)
     {
         mostrarMatriz();
         lerCasas();
+        delay(3);
         limpaTela();
         checaFim();
     }
@@ -49,6 +51,7 @@ int receberDificuldade(int tam, int qtdPares[])
         if(dificuldade>0 && dificuldade<=tam) break;
         else printf("Dificuldade selecionada invalida.\n");
     }
+    limpaTela();
     return dificuldade;
 }
 void criarMatriz(int dificuldade, char caracteres[9])
@@ -104,6 +107,7 @@ void lerCasas()
     int i, j , lin1, col1, lin2, col2;
     printf ("Insira a casa que quer revelar no formato: LINHA,COLUNA: ");
     scanf("%d,%d", &lin1, &col1);
+    limpaTela();
     lin1--; col1--;
     for (i=0;i<linha;i++)
     {
@@ -122,6 +126,7 @@ void lerCasas()
     }
     printf ("Insira a segunda casa que quer revelar no formato: LINHA,COLUNA: ");
     scanf("%d,%d", &lin2, &col2);
+    limpaTela();
     lin2--; col2--;
     for (i=0;i<linha;i++)
     {
@@ -152,21 +157,30 @@ void atualizarMatriz(int lin1, int col1, int lin2, int col2)
 }
 void limpaTela()
 {
-    #if defined(linux) || defined(unix) || defined(APPLE)
+    #ifdef __linux__
+        system("clear");
+    #elif _WIN32
+        system("cls");
+    #elif __APPLE__
         system("clear");
     #endif
-
-    #if defined(WIN32) || defined(WIN64)
-        system("cls");
-    #endif
-}
+    
+} 
 void checaFim()
 {
-    if(acertos == qtdChar) running = 0;
+    if(acertos == qtdChar)
+    {
+    running = 0;
     limpaTela();
     printf("Parabens!!!!\nVoce concluiu a dificuldade %d com %d jogadas.", dificuldade, jogadas);
+    } 
 }
 void mostraPontuacao()
 {
     printf("Jogadas: %d  Acertos: %d\n", jogadas, acertos);
+}
+void delay(int segundos)
+{
+    int tempFinal = time(0) + segundos;
+    while(time(0)<tempFinal);
 }
