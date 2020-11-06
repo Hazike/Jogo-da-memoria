@@ -6,18 +6,29 @@ int receberDificuldade(int tam, int qtdPares[]);
 void criarMatriz(int dificuldade, char caracteres[9]);
 void mostrarMatriz();
 void lerCasas();
+void atualizarMatriz(int lin1, int col1, int lin2, int col2);
+void limpaTela();
+void checaFim();
+void mostraPontuacao();
 
 int matriz[4][4];
-int linha;
+int linha, jogadas, acertos, running, qtdChar, dificuldade, replay;
 
 int main(void)
 {
     char caracteres[9] = "!@#$%&*(";
-    int qtdPares[3] = {4, 6, 8}, dificuldade;
+    int qtdPares[3] = {4, 6, 8};
+    jogadas = 0; acertos = 0, running = 1;
     dificuldade = receberDificuldade(3, qtdPares);
     criarMatriz(dificuldade, caracteres);
-    mostrarMatriz();
-    lerCasas();
+    while(running)
+    {
+        mostrarMatriz();
+        lerCasas();
+        limpaTela();
+        checaFim();
+    }
+    
     return 0;
 }
 /* a funçao recebe um vetor contendo a quantidade de pares em cada dificuldade
@@ -42,7 +53,7 @@ int receberDificuldade(int tam, int qtdPares[])
 }
 void criarMatriz(int dificuldade, char caracteres[9])
 {
-    int qtdChar, i, j, linAleatoria, colAleatoria, count;
+    int i, j, linAleatoria, colAleatoria, count;
     qtdChar = 4 + (dificuldade-1)*2;
     linha = dificuldade+1;
     srand(time(0));
@@ -63,6 +74,7 @@ void criarMatriz(int dificuldade, char caracteres[9])
             if(count == 2) break;
         }
     }
+    /* apagar dps */
     for(i=0;i<linha;i++)
     {
         for(j=0;j<4;j++) printf("%2c", matriz[i][j]);
@@ -72,11 +84,14 @@ void criarMatriz(int dificuldade, char caracteres[9])
 void mostrarMatriz()
 {
     int i,j;
-    for (i=0;i<linha;i++){
+    mostraPontuacao();
+    for (i=0;i<linha;i++)
+    {
         if (i==0)
             printf ("   1  2  3  4\n");
         printf ("%d ", i+1);
-        for (j=0;j<4;j++){
+        for (j=0;j<4;j++)
+        {
             if(matriz[i][j])
                 printf ("[?]");
             else printf("   ");
@@ -87,13 +102,16 @@ void mostrarMatriz()
 void lerCasas()
 {
     int i, j , lin1, col1, lin2, col2;
+    printf ("Insira a casa que quer revelar no formato: LINHA,COLUNA: ");
     scanf("%d,%d", &lin1, &col1);
     lin1--; col1--;
-    for (i=0;i<linha;i++){
+    for (i=0;i<linha;i++)
+    {
         if (i==0)
             printf ("   1  2  3  4\n");
         printf ("%d ", i+1);
-        for (j=0;j<4;j++){
+        for (j=0;j<4;j++)
+        {
             if(i == lin1 && j == col1)
                 printf("[%c]", matriz[i][j]);
             else if(matriz[i][j])
@@ -102,16 +120,17 @@ void lerCasas()
         }
         printf("\n");
     }
+    printf ("Insira a segunda casa que quer revelar no formato: LINHA,COLUNA: ");
     scanf("%d,%d", &lin2, &col2);
     lin2--; col2--;
-    for (i=0;i<linha;i++){
+    for (i=0;i<linha;i++)
+    {
         if (i==0)
             printf ("   1  2  3  4\n");
         printf ("%d ", i+1);
-        for (j=0;j<4;j++){
-            if(i == lin1 && j == col1)
-                printf("[%c]", matriz[i][j]);
-            else if(i == lin2 && j == col2)
+        for (j=0;j<4;j++)
+        {
+            if((i == lin1 && j == col1) || (i == lin2 && j == col2))
                 printf("[%c]", matriz[i][j]);
             else if(matriz[i][j])
                 printf ("[?]");
@@ -119,5 +138,35 @@ void lerCasas()
         }
         printf("\n");
     }
+    if (matriz[lin1][col1] == matriz[lin2][col2])
+    {
+        atualizarMatriz(lin1,col1,lin2,col2);
+        acertos++;
+	}
+    jogadas++;
 }
+void atualizarMatriz(int lin1, int col1, int lin2, int col2)
+{
+	matriz[lin1][col1] = 0;
+	matriz[lin2][col2] = 0;
+}
+void limpaTela()
+{
+    #if defined(linux) || defined(unix) || defined(APPLE)
+        system("clear");
+    #endif
 
+    #if defined(WIN32) || defined(WIN64)
+        system("cls");
+    #endif
+}
+void checaFim()
+{
+    if(acertos == qtdChar) running = 0;
+    limpaTela();
+    printf("Parabens!!!!\nVoce concluiu a dificuldade %d com %d jogadas.", dificuldade, jogadas);
+}
+void mostraPontuacao()
+{
+    printf("Jogadas: %d  Acertos: %d\n", jogadas, acertos);
+}
