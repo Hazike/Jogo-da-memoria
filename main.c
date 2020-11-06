@@ -19,6 +19,7 @@ void checaFim();
 void mostraPontuacao();
 void delay(int segundos);
 int validaJogadas(int lin, int col);
+int replayPartida();
 
 /* Variaveis globais */
 int matriz[4][4];
@@ -27,19 +28,23 @@ int linha, jogadas, acertos, running, qtdChar, dificuldade;
 /* Main */
 int main(void)
 {
-    char caracteres[9] = "!@#$%&*(";
-    int qtdPares[3] = {4, 6, 8};
-    jogadas = 0; acertos = 0, running = 1;
-    dificuldade = receberDificuldade(3, qtdPares);
-    criarMatriz(dificuldade, caracteres);
-    while(running)
+    do
     {
-        mostrarMatriz();
-        lerCasas();
-        delay(3);
-        limpaTela();
-        checaFim();
-    }
+        char caracteres[9] = "!@#$%&*(";
+        int qtdPares[3] = {4, 6, 8};
+        jogadas = 0; acertos = 0, running = 1;
+        dificuldade = receberDificuldade(3, qtdPares);
+        criarMatriz(dificuldade, caracteres);
+        while(running)
+        {
+            mostrarMatriz();
+            lerCasas();
+            delay(3);
+            limpaTela();
+            checaFim();
+        }
+    }while(replayPartida());
+    
     
     return 0;
 }
@@ -232,5 +237,18 @@ int validaJogadas(int lin, int col)
         printf("Jogada invalida\n\n");
         return 1;
     }
+    else return 0;
+}
+
+/* A funcao checa se o jogador gostaria de jogar outra partida */
+int replayPartida()
+{
+    char c;
+    fflush(stdin);
+    delay(3);
+    limpaTela();
+    printf("Deseja jogar outra partida? s/n: ");
+    scanf(" %c", &c);
+    if(c == 's' || c == 'S') return 1;
     else return 0;
 }
