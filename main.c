@@ -3,34 +3,27 @@
 #include <time.h>
 
 int receberDificuldade(int tam, int qtdPares[]);
-<<<<<<< HEAD
-int criarMatriz(int dificuldade, char caracteres[9]);
-
-int main(void)
-{
-    char caracteres[9] = "!@#$%%&(";
-    int qtdPares[3] = {4, 6, 8};
-    receberDificuldade(3, qtdPares);
-=======
 void criarMatriz(int dificuldade, char caracteres[9]);
 void mostrarMatriz();
 void lerCasas();
-
 int matriz[4][4];
-int linha;
+int linha,pontos;
 
 int main(void)
 {
     char caracteres[9] = "!@#$%&*(";
     int qtdPares[3] = {4, 6, 8}, dificuldade;
-    dificuldade = receberDificuldade(3, qtdPares);
-    criarMatriz(dificuldade, caracteres);
-    mostrarMatriz();
-    lerCasas();
->>>>>>> 2553b88afc90d208ad89cfff8470ad13119adef7
+    criarMatriz(receberDificuldade(3, qtdPares), caracteres);
+    while (checarProgresso()!=0){
+		mostrarMatriz();
+    	lerCasas();
+    	printf ("A tela sera limpa em 2 segundos!");
+		sleep(3);
+		LimpaTela();
+	}
     return 0;
 }
-/* a funÃ§ao recebe um vetor contendo a quantidade de pares em cada dificuldade
+/* a funçao recebe um vetor contendo a quantidade de pares em cada dificuldade
 e o tamanho do vetor. Ela escreve no console as dificuldades e recebe
 a escolhida pelo usuario, dps retorna a quantidade de pares da dificuldade
 escolhida. */
@@ -43,31 +36,16 @@ int receberDificuldade(int tam, int qtdPares[])
     }
     while (1)
     {
-        printf("Selecione a dificuldade:");
+        printf("Selecione a dificuldade: ");
         scanf("%d", &dificuldade);
-        if(dificuldade>0 && dificuldade<=tam) break;
-        else printf("Dificuldade selecionada invalida.\n");
+        if	(dificuldade>0 && dificuldade<=tam) 
+			break;
+        else 
+			printf("Dificuldade selecionada invalida!\n");
     }
     return dificuldade;
 }
-<<<<<<< HEAD
-int criarMatriz(int dificuldade, char caracteres[9])
-{
-    int matriz[4][4], linha, qtdChar, i;
-    qtdChar = 4 + (dificuldade-1)*2;
-    linha = dificuldade+1;
-    srand(time(0));
-    for(i=0; i<qtdChar; i++)
-    {
-        while(1)
-        {
-
-        }
-    }
-}
-=======
-void criarMatriz(int dificuldade, char caracteres[9])
-{
+void criarMatriz(int dificuldade, char caracteres[9]){
     int qtdChar, i, j, linAleatoria, colAleatoria, count;
     qtdChar = 4 + (dificuldade-1)*2;
     linha = dificuldade+1;
@@ -95,8 +73,7 @@ void criarMatriz(int dificuldade, char caracteres[9])
         printf("\n");
     }
 }
-void mostrarMatriz()
-{
+void mostrarMatriz(){
     int i,j;
     for (i=0;i<linha;i++){
         if (i==0)
@@ -110,9 +87,9 @@ void mostrarMatriz()
         printf("\n");
     }
 }
-void lerCasas()
-{
+void lerCasas(){
     int i, j , lin1, col1, lin2, col2;
+    printf ("Insira a casa que quer revelar no formato: LINHA,COLUNA: ");
     scanf("%d,%d", &lin1, &col1);
     lin1--; col1--;
     for (i=0;i<linha;i++){
@@ -128,6 +105,7 @@ void lerCasas()
         }
         printf("\n");
     }
+    printf ("Insira a segunda casa que quer revelar no formato: LINHA,COLUNA: ");
     scanf("%d,%d", &lin2, &col2);
     lin2--; col2--;
     for (i=0;i<linha;i++){
@@ -135,16 +113,42 @@ void lerCasas()
             printf ("   1  2  3  4\n");
         printf ("%d ", i+1);
         for (j=0;j<4;j++){
-            if(i == lin1 && j == col1)
-                printf("[%c]", matriz[i][j]);
-            else if(i == lin2 && j == col2)
+            if(i == lin1 && j == col1 || i == lin2 && j == col2)
                 printf("[%c]", matriz[i][j]);
             else if(matriz[i][j])
                 printf ("[?]");
             else printf("   ");
         }
         printf("\n");
+    	if (matriz[lin1][col1] == matriz[lin2][col2]){
+            	atualizarMatriz(lin1,col1,lin2,col2);
+		}
     }
 }
+void atualizarMatriz(int lin1, int col1, int lin2, int col2){
+	matriz[lin1][col1] = 0;
+	matriz[lin2][col2] = 0;
 
->>>>>>> 2553b88afc90d208ad89cfff8470ad13119adef7
+}
+int checarProgresso(){
+	int i,j,cont=0;
+	for (i=0;i<linha;i++){
+		for (j=0;j<4;j++){
+			if (matriz[i][j] == 0)
+				cont++;
+		}
+	}
+	if (cont == (linha*4))
+		return 0;
+	else
+		return 1;
+}
+void LimpaTela(){
+    #if defined(linux) || defined(unix) || defined(APPLE)
+        system("clear");
+    #endif
+
+    #if defined(WIN32) || defined(WIN64)
+        system("cls");
+    #endif
+}
