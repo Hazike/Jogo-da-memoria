@@ -151,8 +151,11 @@ void lerCasas()
     }
     do
     {
-    printf ("Insira a segunda casa que quer revelar no formato: LINHA,COLUNA: ");
-    scanf("%d,%d", &lin2, &col2);
+        do 
+        {
+            printf ("Insira a segunda casa que quer revelar no formato: LINHA,COLUNA: ");
+            scanf("%d,%d", &lin2, &col2);
+        }while(lin2 == lin1+1 && col2 == col1+1);
     } while(validaJogadas(lin2, col2));
     jogadas++;
     limpaTela();
