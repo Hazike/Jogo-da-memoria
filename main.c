@@ -1,15 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <time.h>
 
 int receberDificuldade(int tam, int qtdPares[]);
-int* criarMatriz(int dificuldade);
+void criarMatriz(int dificuldade, char caracteres[9]);
+void mostrarMatriz();
+void lerCasas();
+
+int matriz[4][4];
+int linha;
 
 int main(void)
 {
-    int qtdPares[3] = {4, 10, 16};
-    receberDificuldade(3, qtdPares);
+    char caracteres[9] = "!@#$%&*(";
+    int qtdPares[3] = {4, 6, 8}, dificuldade;
+    dificuldade = receberDificuldade(3, qtdPares);
+    criarMatriz(dificuldade, caracteres);
+    mostrarMatriz();
+    lerCasas();
     return 0;
 }
 /* a funçao recebe um vetor contendo a quantidade de pares em cada dificuldade
@@ -32,12 +40,84 @@ int receberDificuldade(int tam, int qtdPares[])
     }
     return dificuldade;
 }
-int* criarMatriz(int dificuldade)
+void criarMatriz(int dificuldade, char caracteres[9])
 {
+    int qtdChar, i, j, linAleatoria, colAleatoria, count;
+    qtdChar = 4 + (dificuldade-1)*2;
+    linha = dificuldade+1;
     srand(time(0));
-    if(dificuldade==1)
+    for(i=0; i<linha; i++)
+        for(j=0; j<4; j++) matriz[i][j] = 0;
+    for(i=0; i<qtdChar; i++)
     {
-        
+        count = 0;
+        while(1)
+        {
+            linAleatoria = rand()%linha;
+            colAleatoria = rand()%4;
+            if(matriz[linAleatoria][colAleatoria] == 0)
+            {
+                matriz[linAleatoria][colAleatoria] = caracteres[i];
+                count++;
+            }
+            if(count == 2) break;
+        }
     }
-
+    for(i=0;i<linha;i++)
+    {
+        for(j=0;j<4;j++) printf("%2c", matriz[i][j]);
+        printf("\n");
+    }
 }
+void mostrarMatriz()
+{
+    int i,j;
+    for (i=0;i<linha;i++){
+        if (i==0)
+            printf ("   1  2  3  4\n");
+        printf ("%d ", i+1);
+        for (j=0;j<4;j++){
+            if(matriz[i][j])
+                printf ("[?]");
+            else printf("   ");
+        }
+        printf("\n");
+    }
+}
+void lerCasas()
+{
+    int i, j , lin1, col1, lin2, col2;
+    scanf("%d,%d", &lin1, &col1);
+    lin1--; col1--;
+    for (i=0;i<linha;i++){
+        if (i==0)
+            printf ("   1  2  3  4\n");
+        printf ("%d ", i+1);
+        for (j=0;j<4;j++){
+            if(i == lin1 && j == col1)
+                printf("[%c]", matriz[i][j]);
+            else if(matriz[i][j])
+                printf ("[?]");
+            else printf("   ");
+        }
+        printf("\n");
+    }
+    scanf("%d,%d", &lin2, &col2);
+    lin2--; col2--;
+    for (i=0;i<linha;i++){
+        if (i==0)
+            printf ("   1  2  3  4\n");
+        printf ("%d ", i+1);
+        for (j=0;j<4;j++){
+            if(i == lin1 && j == col1)
+                printf("[%c]", matriz[i][j]);
+            else if(i == lin2 && j == col2)
+                printf("[%c]", matriz[i][j]);
+            else if(matriz[i][j])
+                printf ("[?]");
+            else printf("   ");
+        }
+        printf("\n");
+    }
+}
+
