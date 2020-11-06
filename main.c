@@ -77,12 +77,13 @@ void criarMatriz(int dificuldade, char caracteres[9])
             if(count == 2) break;
         }
     }
-    /* apagar dps */
+    /* apagar dps 
     for(i=0;i<linha;i++)
     {
         for(j=0;j<4;j++) printf("%2c", matriz[i][j]);
         printf("\n");
     }
+    */
 }
 void mostrarMatriz()
 {
@@ -108,6 +109,7 @@ void lerCasas()
     printf ("Insira a casa que quer revelar no formato: LINHA,COLUNA: ");
     scanf("%d,%d", &lin1, &col1);
     limpaTela();
+    mostraPontuacao();
     lin1--; col1--;
     for (i=0;i<linha;i++)
     {
@@ -126,7 +128,9 @@ void lerCasas()
     }
     printf ("Insira a segunda casa que quer revelar no formato: LINHA,COLUNA: ");
     scanf("%d,%d", &lin2, &col2);
+    jogadas++;
     limpaTela();
+    mostraPontuacao();
     lin2--; col2--;
     for (i=0;i<linha;i++)
     {
@@ -148,7 +152,6 @@ void lerCasas()
         atualizarMatriz(lin1,col1,lin2,col2);
         acertos++;
 	}
-    jogadas++;
 }
 void atualizarMatriz(int lin1, int col1, int lin2, int col2)
 {
@@ -172,7 +175,7 @@ void checaFim()
     {
     running = 0;
     limpaTela();
-    printf("Parabens!!!!\nVoce concluiu a dificuldade %d com %d jogadas.", dificuldade, jogadas);
+    printf("Parabens!!!!\nVoce concluiu a dificuldade %d com %d jogadas.\n", dificuldade, jogadas);
     } 
 }
 void mostraPontuacao()
