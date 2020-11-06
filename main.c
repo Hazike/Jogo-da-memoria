@@ -1,7 +1,14 @@
+/* 
+Caio Mergulhao Montenegro - 120015018
+Wemerson Silva Caxias da Costa - 120063485
+Vitor Ferreira Nunes - 120034070
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
+/* Prototipos das funçoes */
 int receberDificuldade(int tam, int qtdPares[]);
 void criarMatriz(int dificuldade, char caracteres[9]);
 void mostrarMatriz();
@@ -11,10 +18,13 @@ void limpaTela();
 void checaFim();
 void mostraPontuacao();
 void delay(int segundos);
+int validaJogadas(int lin, int col);
 
+/* Variaveis globais */
 int matriz[4][4];
 int linha, jogadas, acertos, running, qtdChar, dificuldade;
 
+/* Main */
 int main(void)
 {
     char caracteres[9] = "!@#$%&*(";
@@ -33,6 +43,9 @@ int main(void)
     
     return 0;
 }
+
+/* Funçoes */
+
 /* a funçao recebe um vetor contendo a quantidade de pares em cada dificuldade
 e o tamanho do vetor. Ela escreve no console as dificuldades e recebe
 a escolhida pelo usuario, dps retorna a quantidade de pares da dificuldade
@@ -54,6 +67,9 @@ int receberDificuldade(int tam, int qtdPares[])
     limpaTela();
     return dificuldade;
 }
+
+/* A função define os caracteres aleatoriamente da matriz de acordo
+com a dificuldade. */
 void criarMatriz(int dificuldade, char caracteres[9])
 {
     int i, j, linAleatoria, colAleatoria, count;
@@ -77,14 +93,10 @@ void criarMatriz(int dificuldade, char caracteres[9])
             if(count == 2) break;
         }
     }
-    /* apagar dps 
-    for(i=0;i<linha;i++)
-    {
-        for(j=0;j<4;j++) printf("%2c", matriz[i][j]);
-        printf("\n");
-    }
-    */
 }
+
+/* A funçao mostra a matriz com ? substituindo os caracteres que fazem
+parte do jogo da memoria (como se ela estivesse no escuro) */
 void mostrarMatriz()
 {
     int i,j;
@@ -103,11 +115,17 @@ void mostrarMatriz()
         printf("\n");
     }
 }
+
+/* A funçao le as o par de casas que o usuario escolher e mostra o caracter
+escondido nas casas escolhidas, alem de checar se eh um par de caracteres iguais */
 void lerCasas()
 {
     int i, j , lin1, col1, lin2, col2;
+    do
+    {
     printf ("Insira a casa que quer revelar no formato: LINHA,COLUNA: ");
     scanf("%d,%d", &lin1, &col1);
+    } while(validaJogadas(lin1, col1));
     limpaTela();
     mostraPontuacao();
     lin1--; col1--;
@@ -126,8 +144,11 @@ void lerCasas()
         }
         printf("\n");
     }
+    do
+    {
     printf ("Insira a segunda casa que quer revelar no formato: LINHA,COLUNA: ");
     scanf("%d,%d", &lin2, &col2);
+    } while(validaJogadas(lin2, col2));
     jogadas++;
     limpaTela();
     mostraPontuacao();
@@ -153,11 +174,15 @@ void lerCasas()
         acertos++;
 	}
 }
+
+/* A funçao atribui o valor 0 aos pares que o jogador acertou */
 void atualizarMatriz(int lin1, int col1, int lin2, int col2)
 {
 	matriz[lin1][col1] = 0;
 	matriz[lin2][col2] = 0;
 }
+
+/* A funçao da um clear no console indepente do SO */
 void limpaTela()
 {
     #ifdef __linux__
@@ -166,9 +191,11 @@ void limpaTela()
         system("cls");
     #elif __APPLE__
         system("clear");
-    #endif
-    
-} 
+    #endif    
+}
+
+/* A funcao checa se o jogador chegou ao fim da partida e exibe
+seu resultado */ 
 void checaFim()
 {
     if(acertos == qtdChar)
@@ -178,12 +205,32 @@ void checaFim()
     printf("Parabens!!!!\nVoce concluiu a dificuldade %d com %d jogadas.\n", dificuldade, jogadas);
     } 
 }
+
+/* Mosta os dados da partida, como se fosse uma HUD */
 void mostraPontuacao()
 {
-    printf("Jogadas: %d  Acertos: %d\n", jogadas, acertos);
+    printf("Jogadas: %d  Acertos: %d  Dificuldade: %d\n", jogadas, acertos, dificuldade);
 }
+
+/* A funcao cria um delay */
 void delay(int segundos)
 {
     int tempFinal = time(0) + segundos;
     while(time(0)<tempFinal);
+}
+
+/* A funca checa se a casa escolhida é valida */
+int validaJogadas(int lin, int col)
+{
+    if(lin > linha || col > 4)
+    {
+        printf("Jogada invalida\n\n");
+        return 1;
+    }
+    else if(matriz[lin-1][col-1] == 0)
+    {
+        printf("Jogada invalida\n\n");
+        return 1;
+    }
+    else return 0;
 }
